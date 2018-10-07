@@ -142,8 +142,8 @@ const size_t   FUSION_TX_MIN_IN_OUT_COUNT_RATIO              = 4;
 const uint32_t KEY_IMAGE_CHECKING_BLOCK_INDEX                = 0;
 const uint32_t UPGRADE_HEIGHT_V2                             = 1;
 const uint32_t UPGRADE_HEIGHT_V3                             = 2;
-const uint32_t UPGRADE_HEIGHT_V4                             = 350000; // Upgrade height for CN-Lite Variant 1 switch.
-const uint32_t UPGRADE_HEIGHT_V5                             = 2000000; // Upgrade height for CN-Soft Shell Variant 1 switch.
+const uint32_t UPGRADE_HEIGHT_V4                             = 4; // Upgrade height for CN-Lite Variant 1 switch.
+const uint32_t UPGRADE_HEIGHT_V5                             = 5; // Upgrade height for CN-Soft Shell Variant 1 switch.
 const uint32_t UPGRADE_HEIGHT_CURRENT                        = UPGRADE_HEIGHT_V5;
 const unsigned UPGRADE_VOTING_THRESHOLD                      = 90;               // percent
 const uint32_t UPGRADE_VOTING_WINDOW                         = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
@@ -154,22 +154,14 @@ static_assert(UPGRADE_VOTING_WINDOW > 1, "Bad UPGRADE_VOTING_WINDOW");
 /* Block heights we are going to have hard forks at */
 const uint64_t FORK_HEIGHTS[] =
 {
-    187000,  // 0
-    350000,  // 1
-    440000,  // 2
-    620000,  // 3
-    700000,  // 4
-    800000,  // 5
-    1000000, // 6
-    1200000, // 7
-    1400000, // 8
-    1600000, // 9
-    1800000, // 10
-    2000000, // 11
+    1,  // 0
+    2,  // 1
+    3,  // 2
+    4  // 3
 };
 
 /* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX                 = 5;
+const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX                 = 3;
 
 const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
@@ -192,7 +184,7 @@ const char     P2P_NET_DATA_FILENAME[]                       = "p2pstate.bin";
 const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json";
 } // parameters
 
-const char     CRYPTONOTE_NAME[]                             = "TurtleCoin";
+const char     CRYPTONOTE_NAME[]                             = "TurtleCoinSS";
 
 const uint8_t  TRANSACTION_VERSION_1                         =  1;
 const uint8_t  TRANSACTION_VERSION_2                         =  2;
@@ -209,8 +201,8 @@ const size_t   BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT        =  10000;  //by def
 const size_t   BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  100;    //by default, blocks count in blocks downloading
 const size_t   COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT         =  1000;
 
-const int      P2P_DEFAULT_PORT                              =  11897;
-const int      RPC_DEFAULT_PORT                              =  11898;
+const int      P2P_DEFAULT_PORT                              =  11895;
+const int      RPC_DEFAULT_PORT                              =  11896;
 const int      SERVICE_DEFAULT_PORT                          =  8070;
 
 const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
@@ -239,13 +231,11 @@ const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "";
 const char     LATEST_VERSION_URL[]                          = "http://latest.turtlecoin.lol";
 const static   boost::uuids::uuid CRYPTONOTE_NETWORK         =
 {
-    {  0xb5, 0x0c, 0x4a, 0x6c, 0xcf, 0x52, 0x57, 0x41, 0x65, 0xf9, 0x91, 0xa4, 0xb6, 0xc1, 0x43, 0xe9  }
+    {  0xb5, 0x0c, 0x4a, 0x6c, 0xcf, 0x52, 0x57, 0x41, 0x65, 0xf9, 0x91, 0xa4, 0xb6, 0xc1, 0x43, 0xaa  }
 };
 
 const char* const SEED_NODES[] = {
-  "206.189.142.142:11897",//rock
-  "145.239.88.119:11999", //cision
-  "142.44.242.106:11897", //tom
-  "165.227.252.132:11897" //iburnmycd
+  "165.227.252.132:11895",
+  "167.99.101.97:11895"
 };
 } // CryptoNote
