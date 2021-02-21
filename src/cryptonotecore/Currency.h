@@ -308,6 +308,7 @@ namespace CryptoNote
         }
 
         bool getBlockReward(
+            uint32_t blockIndex,
             uint8_t blockMajorVersion,
             size_t medianSize,
             size_t currentBlockSize,

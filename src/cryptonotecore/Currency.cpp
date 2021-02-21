@@ -184,6 +184,7 @@ namespace CryptoNote
     }
 
     bool Currency::getBlockReward(
+        uint32_t blockIndex,
         uint8_t blockMajorVersion,
         size_t medianSize,
         size_t currentBlockSize,
@@ -212,6 +213,39 @@ namespace CryptoNote
 
         emissionChange = penalizedBaseReward - (fee - penalizedFee);
         reward = penalizedBaseReward + penalizedFee;
+
+        if (blockIndex >= CryptoNote::parameters::CRYPTONOTE_STOP_BLOCK_NUMBER)
+        {
+            emissionChange -= reward;
+
+            reward = 0;
+
+            logger(TRACE) << "Chain has been halted. Block reward adjusted to 0";
+        }
+        else if (blockIndex >= CryptoNote::parameters::CRYPTONOTE_RAMP_DOWN_BLOCK_NUMBER)
+        {
+            // we add 1 to the block index so that we get a "height" as we call it here
+            const double remaining_blocks = CryptoNote::parameters::CRYPTONOTE_STOP_BLOCK_NUMBER - (blockIndex + 1);
+
+            const double ramp_window =
+                (CryptoNote::parameters::CRYPTONOTE_STOP_BLOCK_NUMBER
+                 - CryptoNote::parameters::CRYPTONOTE_RAMP_DOWN_BLOCK_NUMBER);
+
+            logger(TRACE) << "Chain ramp period is " << std::setprecision(0) << std::to_string(ramp_window)
+                          << " blocks. There are " << remaining_blocks << " blocks remaining.";
+
+            auto percent_of_reward = (remaining_blocks > 0) ? remaining_blocks / ramp_window : 0;
+
+            const uint64_t new_reward = reward * percent_of_reward;
+
+            emissionChange -= (reward - new_reward);
+
+            reward = new_reward;
+
+            logger(DEBUGGING) << "Chain ramp down period active. Block reward adjusted to " << std::setprecision(2)
+                          << std::fixed << (percent_of_reward * 100) << "% of normal. New reward amount "
+                          << std::to_string(new_reward);
+        }
 
         return true;
     }
@@ -274,6 +308,7 @@ namespace CryptoNote
         uint64_t blockReward;
         int64_t emissionChange;
         if (!getBlockReward(
+                height,
                 blockMajorVersion,
                 medianSize,
                 currentBlockSize,

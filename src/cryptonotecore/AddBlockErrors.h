@@ -19,7 +19,8 @@ namespace CryptoNote
             ADDED_TO_ALTERNATIVE_AND_SWITCHED,
             ALREADY_EXISTS,
             REJECTED_AS_ORPHANED,
-            DESERIALIZATION_FAILED
+            DESERIALIZATION_FAILED,
+            REJECTED_CHAIN_STOPPED
         };
 
         // custom category:
@@ -56,6 +57,8 @@ namespace CryptoNote
                         return "Block rejected as orphaned";
                     case AddBlockErrorCode::DESERIALIZATION_FAILED:
                         return "Deserialization error";
+                    case AddBlockErrorCode::REJECTED_CHAIN_STOPPED:
+                        return "Blockchain has been halted";
                     default:
                         return "Unknown error";
                 }

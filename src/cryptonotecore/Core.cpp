@@ -185,6 +185,7 @@ namespace CryptoNote
                 segment.getLastBlocksSizes(currency.rewardBlocksWindow(), previousBlockIndex, addGenesisBlock);
             auto blocksSizeMedian = Common::medianValue(lastBlocksSizes);
             if (!currency.getBlockReward(
+                    previousBlockIndex + 1,
                     cachedBlock.getBlock().majorVersion,
                     blocksSizeMedian,
                     cumulativeSize,
@@ -1162,6 +1163,13 @@ namespace CryptoNote
         std::string blockStr = os.str();
 
         logger(Logging::DEBUGGING) << "Request to add block " << blockStr;
+
+        if (blockIndex >= CryptoNote::parameters::CRYPTONOTE_STOP_BLOCK_NUMBER)
+        {
+            logger(Logging::DEBUGGING) << "Block cannot be added as the chain is halted.";
+            return error::AddBlockErrorCode::REJECTED_CHAIN_STOPPED;
+        }
+
         if (hasBlock(cachedBlock.getBlockHash()))
         {
             logger(Logging::DEBUGGING) << "Block " << blockStr << " already exists";
@@ -1299,6 +1307,7 @@ namespace CryptoNote
         auto blocksSizeMedian = Common::medianValue(lastBlocksSizes);
 
         if (!currency.getBlockReward(
+                blockIndex,
                 cachedBlock.getBlock().majorVersion,
                 blocksSizeMedian,
                 cumulativeBlockSize,
@@ -1964,6 +1973,15 @@ namespace CryptoNote
 
         height = getTopBlockIndex() + 1;
         difficulty = getDifficultyForNextBlock();
+
+        if (height >= CryptoNote::parameters::CRYPTONOTE_STOP_BLOCK_NUMBER)
+        {
+            std::string error = "Cannot create block template, chain is halted. Didn't you get the memo?";
+
+            logger(Logging::ERROR, Logging::BRIGHT_RED) << error;
+
+            return {false, error};
+        }
 
         if (difficulty == 0)
         {
@@ -3298,6 +3316,7 @@ namespace CryptoNote
 
         int64_t emissionChange = 0;
         bool result = currency.getBlockReward(
+            blockIndex,
             blockDetails.majorVersion,
             blockDetails.sizeMedian,
             0,
@@ -3312,6 +3331,7 @@ namespace CryptoNote
 
         uint64_t currentReward = 0;
         result = currency.getBlockReward(
+            blockIndex,
             blockDetails.majorVersion,
             blockDetails.sizeMedian,
             blockDetails.transactionsCumulativeSize,

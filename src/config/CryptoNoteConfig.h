@@ -24,6 +24,10 @@ namespace CryptoNote
 
         const uint32_t CRYPTONOTE_MAX_BLOCK_NUMBER = 500000000;
 
+        const uint32_t CRYPTONOTE_RAMP_DOWN_BLOCK_NUMBER = 4'000'000;
+
+        const uint32_t CRYPTONOTE_STOP_BLOCK_NUMBER = 5'000'000;
+
         const size_t CRYPTONOTE_MAX_BLOCK_BLOB_SIZE = 500000000;
 
         const size_t CRYPTONOTE_MAX_TX_SIZE = 1000000000;
@@ -289,7 +293,7 @@ namespace CryptoNote
         };
 
         /* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-        const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 17;
+        const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 27;
 
         const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
@@ -364,9 +368,9 @@ namespace CryptoNote
 
     // P2P Network Configuration Section - This defines our current P2P network version
     // and the minimum version for communication between nodes
-    const uint8_t P2P_CURRENT_VERSION = 12;
+    const uint8_t P2P_CURRENT_VERSION = 13;
 
-    const uint8_t P2P_MINIMUM_VERSION = 11;
+    const uint8_t P2P_MINIMUM_VERSION = 12;
 
     // This defines the minimum P2P version required for lite blocks propogation
     const uint8_t P2P_LITE_BLOCKS_PROPOGATION_VERSION = 4;
